@@ -1,65 +1,137 @@
+"use client"
 import Image from "next/image";
+import { useSession, signIn, signOut } from "next-auth/react"
+
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <div className="text-white flex flex-col justify-center items-center h-[50vh] gap-6 text-center px-4">
+        <h1 className="font-bold text-5xl md:text-6xl flex items-center gap-3">
+          Welcome to <span className="text-purple-400">ChaFund</span>
+          <img width={80} src="/tea.gif" alt="chai" />
+        </h1>
+
+        <p className="max-w-2xl text-gray-300 text-lg">
+          Let your supporters fund your passion. ChaFund makes it easy for
+          creators and developers to receive small contributions and grow with
+          their community.
+        </p>
+
+        <div className="flex gap-4">
+          <button className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition">
+            Start Fundraising
+          </button>
+
+          <button className="px-6 py-3 rounded-2xl border border-white/30 hover:bg-white/10 transition">
+            Learn More
+          </button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <p className="mt-4 text-gray-400 text-sm">
+          Fuel your projects, one chai at a time ☕
+        </p>
+      </div>
+
+      {/* seperator */}
+
+        <div className="bg-white h-[2px] opacity-10"></div>
+
+
+      <div className="text-white container mx-auto px-6 py-32">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+          How ChaFund Works
+        </h2>
+
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12">
+          {/* Card 1 */}
+          <div className="space-y-4 flex flex-col items-center text-center max-w-xs">
+            <img
+              className="bg-slate-700 p-4 rounded-full"
+              src="/man.gif"
+              alt="Supporters"
+              width={100}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <p className="font-semibold text-lg">Fans Support Your Work</p>
+            <p className="text-gray-300 text-sm">
+              People who love what you create can send micro-support to help
+              your projects grow.
+            </p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="space-y-4 flex flex-col items-center text-center max-w-xs">
+            <img
+              className="bg-slate-700 p-4 rounded-full"
+              src="/coin.gif"
+              alt="Funding"
+              width={100}
+            />
+            <p className="font-semibold text-lg">
+              Turn Appreciation into Funding
+            </p>
+            <p className="text-gray-300 text-sm">
+              Small contributions from many fans can fund your next big idea
+              without ads or sponsors.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="space-y-4 flex flex-col items-center text-center max-w-xs">
+            <img
+              className="bg-slate-700 p-4 rounded-full"
+              src="/group.gif"
+              alt="Community"
+              width={100}
+            />
+            <p className="font-semibold text-lg">Grow a Loyal Community</p>
+            <p className="text-gray-300 text-sm">
+              Build stronger connections with your supporters and let them be
+              part of your journey.
+            </p>
+          </div>
         </div>
-      </main>
+      </div>
+
+   <div className=" py-32">
+  <div className="container mx-auto px-6 text-center">
+    <h1 className="text-3xl md:text-4xl font-bold text-white mb-16">
+      Learn More About Us ☕
+    </h1>
+
+    <div className="flex flex-col md:flex-row justify-center items-stretch gap-8">
+
+      {/* Card 1 */}
+      <div className="bg-gradient-to-br from-purple-700 to-blue-500 rounded-2xl p-8 flex-1 shadow-xl hover:scale-105 transform transition">
+        <h2 className="text-xl font-semibold text-white mb-2">Our Mission</h2>
+        <p className="text-white/80 text-sm">
+          Empower creators and developers by providing a simple way for fans to fund their work.
+        </p>
+      </div>
+
+      {/* Card 2 */}
+      <div className="bg-gradient-to-br  to-blue-500 rounded-2xl p-8 flex-1 shadow-xl hover:scale-105 transform transition">
+        <h2 className="text-xl font-semibold text-white mb-2">Why We Exist</h2>
+        <p className="text-white/80 text-sm">
+          Many creators and open-source developers struggle to get direct support. ChaFund makes it simple for fans to help.
+        </p>
+      </div>
+
+      {/* Card 3 */}
+      <div className="bg-gradient-to-br from-purple-700 to-blue-500 rounded-2xl p-8 flex-1 shadow-xl hover:scale-105 transform transition">
+        <h2 className="text-xl font-semibold text-white mb-2">Our Vision</h2>
+        <p className="text-white/80 text-sm">
+          A world where creators focus on building, while their community actively supports them—one chai at a time.
+        </p>
+      </div>
+
     </div>
+
+    <p className="text-gray-400 text-center mt-12 max-w-2xl mx-auto">
+      Built by developers for developers and creators. ChaFund connects fans and creators seamlessly.
+    </p>
+  </div>
+</div>
+    </>
   );
 }
