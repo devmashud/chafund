@@ -25,7 +25,7 @@ const Navbar = () => {
         <div>
           <Link href={"/login"}>
           <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition"
-          onClick={() => signIn()}>
+          >
             Login
           </button>
           </Link>

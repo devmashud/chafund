@@ -4,6 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react"
 
 
 export default function Home() {
+  
   return (
     <>
       <div className="text-white flex flex-col justify-center items-center h-[50vh] gap-6 text-center px-4">

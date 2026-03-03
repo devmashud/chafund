@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           <main className="flex-1 relative">
             <div
-              className="absolute inset-0 -z-10 
+              className="text-white absolute inset-0 -z-10 
                 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
             />
             {children}

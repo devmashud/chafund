@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Login = () => {
   return (
@@ -38,7 +40,10 @@ const Login = () => {
         </button>
 
         {/* GitHub */}
-        <button className="flex items-center justify-center gap-3 px-6 py-3 rounded-2xl bg-black text-white font-medium hover:opacity-90 transition w-full md:w-auto">
+        <button
+          className="flex items-center justify-center gap-3 px-6 py-3 rounded-2xl bg-black text-white font-medium hover:opacity-90 transition w-full md:w-auto"
+          onClick={() => signIn()}
+        >
           <svg
             aria-label="GitHub logo"
             width="16"
