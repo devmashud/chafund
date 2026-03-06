@@ -17,7 +17,7 @@ const Navbar = () => {
       className="bg-gray-950 border-gray-800 border-b-[0.5px]  text-white flex justify-between items-center px-4
     h-16"
     >
-      <div className="logo font-bold text-xl">ChaFund!</div>
+      <div className="logo font-bold text-xl"><Link href={"/"}>ChaFund!</Link></div>
       {/* <ul className='flex justify-between gap-4'>
             <li>Home</li>
             <li>About</li>

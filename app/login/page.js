@@ -1,10 +1,17 @@
 "use client";
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const Login = () => {
+    const { data: session } = useSession();
+    if(session) {
+      redirect('/dashboard')
+    }
+  
   return (
-    <div className="min-h-[calc(100vh-124px)] bg-gray-950 flex flex-col items-center justify-center   text-white">
+    <>
+     <div className="min-h-[calc(100vh-124px)] bg-gray-950 flex flex-col items-center justify-center   text-white">
       {/* Heading */}
       <h2 className="font-bold text-3xl text-center mb-6">
         Login / Signup to Get Your Fans to Support You
@@ -126,6 +133,7 @@ const Login = () => {
         </button>
       </div>
     </div>
+    </>
   );
 };
 
