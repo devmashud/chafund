@@ -33,7 +33,7 @@ const Navbar = () => {
             onClick={()=>setShowdropdown(!showdropdown)}
               id="dropdownDefaultButton"
               data-dropdown-toggle="dropdown"
-              className="bg-gradient-to-r  from-purple-600 to-blue-500 hover:opacity-90 transition inline-flex items-center justify-center text-white  border border-transparent  focus:ring-1 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded text-sm px-4 py-2.5 focus:outline-none"
+              className="bg-gradient-to-r  from-purple-600 mx-3 to-blue-500 hover:opacity-90 transition inline-flex items-center justify-center text-white  border border-transparent  focus:ring-[1px] focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-4 py-2.5 focus:outline-none"
               type="button"
             >
               Welcome {session.user.name}
@@ -58,55 +58,50 @@ const Navbar = () => {
 
             <div
               id="dropdown"
-              className={`z-10 ${showdropdown?"":"hidden"} absolute bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44`}
+              className={`z-10 bg-gray-900 ${showdropdown?"":"hidden"} absolute right-28 bg-neutral-primary-medium border border-default-medium rounded shadow w-44`}
             >
               <ul
                 className="p-2 text-sm text-body font-medium"
                 aria-labelledby="dropdownDefaultButton"
               >
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/dashboard"
                     className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                   >
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                   >
                     Settings
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                   >
                     Earnings
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
+                  onClick={()=>signOut()}
                     href="#"
                     className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                   >
                     Sign out
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
           </>
         )}
-        {session && (
-          <Link href={"/dashboard"}>
-            <button className="px-4 py-2 mx-4 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition">
-              Dashboard
-            </button>
-          </Link>
-        )}
+     
 
         {session && (
           <button
