@@ -4,7 +4,7 @@ const Username = async ({ params }) => {
   return (
     <>
       {/* {username} */}
-      <div className="cover w-full bg-red-100 relative">
+      <div className="cover w-full  relative">
         <img
           className="object-cover w-full"
           src="https://c10.patreonusercontent.com/4/patreon-media/p/campaign/4842667/452146dcfeb04f38853368f554aadde1/eyJ3IjoxNjAwLCJ3ZSI6MX0%3D/20.gif?token-hash=py2NffPgVZJ_D3KVIWQy3gULEUawvLTB1KS-4uTwq2I%3D&token-time=1775260800"
@@ -46,7 +46,7 @@ const Username = async ({ params }) => {
                     <p className="text-sm text-gray-400">Keep it up! 🔥</p>
                   </div>
                 </div>
-                <span className="font-bold text-green-400">$30</span>
+                <span className="font-bold text-green-500">$30</span>
               </li>
 
               <li className="flex items-center justify-between bg-slate-800 p-3 rounded-md">
@@ -61,7 +61,7 @@ const Username = async ({ params }) => {
                     <p className="text-sm text-gray-400">Love your work ❤️</p>
                   </div>
                 </div>
-                <span className="font-bold text-green-400">$20</span>
+                <span className="font-bold text-green-500">$20</span>
               </li>
 
               <li className="flex items-center justify-between bg-slate-800 p-3 rounded-md">
@@ -76,7 +76,7 @@ const Username = async ({ params }) => {
                     <p className="text-sm text-gray-400">Amazing content!</p>
                   </div>
                 </div>
-                <span className="font-bold text-green-400">$15</span>
+                <span className="font-bold text-green-500">$15</span>
               </li>
             </ul>
           </div>
@@ -102,9 +102,8 @@ const Username = async ({ params }) => {
                 rows="3"
               ></textarea>
 
-              <button className="bg-green-500 hover:bg-green-600 transition-colors p-3 rounded-md font-semibold">
-                Pay Now
-              </button>
+              <button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-md text-sm px-4 py-2.5 text-center leading-5">Pay</button>
+
             </div>
           </div>
         </div>
