@@ -34,12 +34,12 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen flex flex-col ">
         <SessionWrapper>
           <Navbar />
-          <main className="flex-1 relative">
-            <div
-              className="text-white absolute inset-0 -z-10 
-                [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
-            />
+          <main className="flex-1 relative  ">
+            <div className=" text-white  inset-0 -z-10 
+                [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
             {children}
+
+            </div>
           </main>
           <Footer />
         </SessionWrapper>

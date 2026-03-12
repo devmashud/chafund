@@ -22,7 +22,7 @@ const Username = async ({ params }) => {
         </div>
       </div>
 
-      <div className="info flex justify-center items-center flex-col my-30 gap-2">
+      <div className="info flex justify-center items-center flex-col py-30 gap-2">
         <div className="font-bold text-3xl">@{username}</div>
         <div className="text-gray-400">Creating Animated art for VTT's</div>
         <div className="text-gray-400">
