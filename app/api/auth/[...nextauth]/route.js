@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import NextAuth from 'next-auth'
 // import AppleProvider from 'next-auth/providers/apple'
 // import FacebookProvider from 'next-auth/providers/facebook'
@@ -30,7 +31,15 @@ export const authoptions =  NextAuth({
     //   server: process.env.MAIL_SERVER,
     //   from: 'NextAuth.js <no-reply@example.com>'
     // }),
-  ]
+  ],
+  callbacks: {
+  async signIn({ user, account, profile, email, credentials }) {
+   if(account.provider == "github"){
+    // Connect to the database
+    const client = await mongoose.connect()
+   }
+  }
+}
 })
 
 export {authoptions as GET, authoptions as POST}
