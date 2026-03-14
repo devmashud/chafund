@@ -5,6 +5,8 @@ import NextAuth from 'next-auth'
 // import GoogleProvider from 'next-auth/providers/google'
 // import EmailProvider from 'next-auth/providers/email'
 import GitHubProvider from "next-auth/providers/github";
+import User from '@/models/User';
+import Payment from '@/models/Payment';
 
 export const authoptions =  NextAuth({
   providers: [
@@ -36,10 +38,21 @@ export const authoptions =  NextAuth({
   async signIn({ user, account, profile, email, credentials }) {
    if(account.provider == "github"){
     // Connect to the database
-    const client = await mongoose.connect()
+    const client = await mongoose.connect("mongodb://localhost:27017/chafund")
+
+    //Check if the user already exists in the database
+    const currentUser = await User.findOne({email: user.email});
+    if(!currentUser){
+      const newUser = new User({
+        email: user.email,
+        username: profile.login
+      })
+      await newUser.save();
+    }
    }
+   return true
   }
 }
-})
+}) 
 
 export {authoptions as GET, authoptions as POST}
