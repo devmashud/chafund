@@ -7,6 +7,8 @@ import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import User from "@/models/User";
 import Payment from "@/models/Payment";
+import connectDB from "@/lib/db";
+
 
 export const authoptions = NextAuth({
   providers: [
@@ -37,9 +39,7 @@ export const authoptions = NextAuth({
     async signIn({ user, account, profile, email, credentials }) {
       if (account.provider == "github") {
         // Connect to the database
-        const client = await mongoose.connect(
-          "mongodb://localhost:27017/chafund",
-        );
+        const client = await connectDB();
 
         //Check if the user already exists in the database
         const currentUser = await User.findOne({ email: user.email });
