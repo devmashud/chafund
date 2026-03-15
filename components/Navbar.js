@@ -33,7 +33,7 @@ const Navbar = () => {
             onClick={()=>setShowdropdown(!showdropdown)} 
             onBlur={()=>(setTimeout(()=>{
               setShowdropdown(false)
-            },100))}
+            },1000))}
               id="dropdownDefaultButton"
               data-dropdown-toggle="dropdown"
               className="bg-gradient-to-r  from-purple-600 mx-3 to-blue-500 hover:opacity-90 transition inline-flex items-center justify-center text-white  border border-transparent  focus:ring-[1px] focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-4 py-2.5 focus:outline-none"
@@ -77,7 +77,7 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link
-                    href="#"
+                    href={"dashboard/settings"}
                     className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                   >
                     Settings
