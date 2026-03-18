@@ -61,6 +61,7 @@ export const authoptions = NextAuth({
       })
       session.user.username = dbUser.username
       return session;
+      
     },
   },
 });
