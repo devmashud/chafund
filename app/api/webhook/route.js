@@ -11,7 +11,7 @@ export async function POST(req) {
   const sig = headersList.get("stripe-signature"); // ✅ fix
 
   let event;
-   
+
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -26,12 +26,23 @@ export async function POST(req) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
+    const existingPayment = await Payment.findOne({
+      oid: session.id,
+    });
+
+    // 🔥 already completed হলে skip
+    if (existingPayment?.status === "completed") {
+      console.log("⚠️ Already processed");
+      return new Response("ok", { status: 200 });
+    }
+
+    // ✅ update only once
     await Payment.findOneAndUpdate(
       { oid: session.id },
       { status: "completed" },
     );
 
-    console.log("✅ DB updated to completed");
+    console.log("✅ Payment updated once");
   }
 
   return new Response("ok", { status: 200 });

@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { initiate } from "@/actions/useractions";
+import { useLayoutEffect, useState, useEffect } from "react";
+import { initiate, fetchUser } from "@/actions/useractions";
 import { getStripe } from "@/lib/stripe";
 
 export default function PaymentForm({ username }) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
+
+  const [currentUser, setcurrentUser] = useState([]);
 
   //console.log("username in client:", username);
 
@@ -32,6 +34,20 @@ export default function PaymentForm({ username }) {
     } catch (err) {
       console.log("Error:", err.message);
     }
+  };
+
+  const getData = async () => {
+    const payments = await fetchUser();
+    setcurrentUser(payments);
+    console.log(payments);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getUser = () => {
+    console.log(currentUser);
   };
 
   return (
@@ -67,50 +83,27 @@ export default function PaymentForm({ username }) {
             <h3 className="text-xl font-bold mb-4">Supporters</h3>
 
             <ul className="space-y-4">
-              <li className="flex items-center justify-between bg-slate-800 p-3 rounded-md">
-                <div className="flex items-center gap-3">
-                  <img
-                    className="w-10 h-10 rounded-full object-cover"
-                    src="https://i.pravatar.cc/100?img=1"
-                    alt=""
-                  />
-                  <div>
-                    <p className="font-semibold">Iftekhar</p>
-                    <p className="text-sm text-gray-400">Keep it up! 🔥</p>
+              {currentUser.map((item, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between bg-slate-800 p-3 rounded-md"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      className="w-10 h-10 rounded-full object-cover"
+                      src={`https://i.pravatar.cc/100?img=${index + 1}`}
+                      alt=""
+                    />
+                    <div>
+                      <p className="font-semibold">{item.name}</p>
+                      <p className="text-sm text-gray-400">{item.message}</p>
+                    </div>
                   </div>
-                </div>
-                <span className="font-bold text-green-500">$30</span>
-              </li>
-
-              <li className="flex items-center justify-between bg-slate-800 p-3 rounded-md">
-                <div className="flex items-center gap-3">
-                  <img
-                    className="w-10 h-10 rounded-full object-cover"
-                    src="https://i.pravatar.cc/100?img=2"
-                    alt=""
-                  />
-                  <div>
-                    <p className="font-semibold">Rahim</p>
-                    <p className="text-sm text-gray-400">Love your work ❤️</p>
-                  </div>
-                </div>
-                <span className="font-bold text-green-500">$20</span>
-              </li>
-
-              <li className="flex items-center justify-between bg-slate-800 p-3 rounded-md">
-                <div className="flex items-center gap-3">
-                  <img
-                    className="w-10 h-10 rounded-full object-cover"
-                    src="https://i.pravatar.cc/100?img=3"
-                    alt=""
-                  />
-                  <div>
-                    <p className="font-semibold">Karim</p>
-                    <p className="text-sm text-gray-400">Amazing content!</p>
-                  </div>
-                </div>
-                <span className="font-bold text-green-500">$15</span>
-              </li>
+                  <span className="font-bold text-green-500">
+                    ${item.amount}
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="makePayment w-1/2 bg-slate-900 rounded-lg p-6">
@@ -144,9 +137,17 @@ export default function PaymentForm({ username }) {
               <button
                 onClick={handlePay}
                 type="button"
-                class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-md text-sm px-4 py-2.5 text-center leading-5"
+                className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-md text-sm px-4 py-2.5 text-center leading-5"
               >
                 Pay
+              </button>
+
+              <button
+                onClick={() => {
+                  getUser();
+                }}
+              >
+                Data collected
               </button>
             </div>
           </div>

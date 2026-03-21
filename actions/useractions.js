@@ -55,3 +55,14 @@ console.log("to_username in server:", to_username);
   return session.url;
 
 }
+
+
+export const fetchUser = async () => {
+  await connectDB();
+
+  const payments = await Payment.find({
+    status: "completed",
+  }).sort({ createdAt: -1 }); // latest first
+
+  return payments;
+};

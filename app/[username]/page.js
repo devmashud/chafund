@@ -4,9 +4,7 @@ const Username = async ({ params }) => {
   const { username } = await params;
 
   return (
-    <div className="p-10">
-      <h1>@{username}</h1>
-
+    <div className="">
       <PaymentForm username={username} />
     </div>
   );
