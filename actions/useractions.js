@@ -70,7 +70,7 @@ export const fetchUser = async () => {
 
 export const getUserData= async (email)=>{
   await connectDB();
-  const user = await User.find({email});
+  const user = await User.findOne({email});
 
   return JSON.parse(JSON.stringify(user))
 }

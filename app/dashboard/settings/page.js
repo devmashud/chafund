@@ -1,20 +1,43 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { data } from "react-router-dom";
-
+import { getUserData } from "@/actions/useractions";
 
 export default function Settings() {
   const { data: session } = useSession();
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("")
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
 
-  const handleSave = async()=>{
-    console.log(data)
-  }
+ useEffect(() => {
+  const load = async () => {
+    console.log("session:", session);
 
+    if (session?.user?.email) {
+      const user = await getUserData(session.user.email);
+
+      console.log("user:", user);
+
+      if (user) {
+        setName(user.name || "");
+        setEmail(user.email || "")
+        setUsername(user.username || "");
+        setProfilePic(user.profilePic || "");
+        setCoverPic(user.coverPic || "");
+      }
+    }
+  };
+
+  load();
+}, [session]);
+
+  const handleSave = async () => {
+    // console.log(session?.user?.username);
+
+    console.log(name)
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-10">
@@ -41,7 +64,7 @@ export default function Settings() {
                 <label className="text-sm text-gray-400 block mb-1">
                   Email
                 </label>
-                <input className="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none" />
+                <input value={email} className=" w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none" />
               </div>
 
               <div>
@@ -100,7 +123,12 @@ export default function Settings() {
           </div>
 
           {/* Save Button */}
-          <button className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 font-semibold">
+          <button
+            onClick={() => {
+              handleSave();
+            }}
+            className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 font-semibold"
+          >
             Save Changes
           </button>
         </div>

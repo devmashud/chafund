@@ -9,7 +9,6 @@ import User from "@/models/User";
 import Payment from "@/models/Payment";
 import connectDB from "@/lib/db";
 
-
 export const authoptions = NextAuth({
   providers: [
     GitHubProvider({
@@ -46,22 +45,25 @@ export const authoptions = NextAuth({
         if (!currentUser) {
           const newUser = new User({
             email: user.email,
+            name: user.name,
             username: profile.login,
           });
           await newUser.save();
         }
-
       }
       return true;
     },
 
     async session({ session, user, token }) {
       const dbUser = await User.findOne({
-        email : session.user.email
-      })
-      session.user.username = dbUser.username
+        email: session.user.email,
+      });
+      if (dbUser) {
+        session.user.username = dbUser.username;
+        session.user.name = dbUser.name; // 🔥 ADD THIS
+        session.user.profilePic = dbUser.profilePic;
+      }
       return session;
-      
     },
   },
 });
