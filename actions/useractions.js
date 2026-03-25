@@ -66,3 +66,11 @@ export const fetchUser = async () => {
 
   return payments;
 };
+
+
+export const getUserData= async (email)=>{
+  await connectDB();
+  const user = await User.find({email});
+
+  return JSON.parse(JSON.stringify(user))
+}

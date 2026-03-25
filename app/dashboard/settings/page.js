@@ -1,10 +1,21 @@
 "use client";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { data } from "react-router-dom";
+
+
 export default function Settings() {
+  const { data: session } = useSession();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
+
+  const handleSave = async()=>{
+    console.log(data)
+  }
+
+
   return (
     <div className="min-h-screen bg-slate-950 text-white p-10">
       <h1 className="text-3xl font-bold mb-10">Profile Settings</h1>
