@@ -2,57 +2,83 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { getUserData, updateProfile } from "@/actions/useractions";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Settings() {
   const { data: session } = useSession();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
   const [loading, setLoading] = useState(false);
 
- useEffect(() => {
-  const load = async () => {
-    console.log("session:", session);
+  // <ToastContainer
+  //   position="top-left"
+  //   autoClose={5000}
+  //   hideProgressBar={false}
+  //   newestOnTop={false}
+  //   closeOnClick={false}
+  //   rtl={false}
+  //   pauseOnFocusLoss
+  //   draggable
+  //   pauseOnHover
+  //   theme="light"
+  //   transition={Bounce}
+  // />;
 
-    if (session?.user?.email) {
-      const user = await getUserData(session.user.email);
 
-      console.log("user:", user);
 
-      if (user) {
-        setName(user.name || "");
-        setEmail(user.email || "")
-        setUsername(user.username || "");
-        setProfilePic(user.profilePic || "");
-        setCoverPic(user.coverPic || "");
+  useEffect(() => {
+    const load = async () => {
+      console.log("session:", session);
+
+      if (session?.user?.email) {
+        const user = await getUserData(session.user.email);
+
+        console.log("user:", user);
+
+        if (user) {
+          setName(user.name || "");
+          setEmail(user.email || "");
+          setUsername(user.username || "");
+          setProfilePic(user.profilePic || "");
+          setCoverPic(user.coverPic || "");
+        }
       }
-    }
-  };
+    };
 
-  load();
-}, [session]);
+    load();
+  }, [session]);
 
   const handleSave = async () => {
-   try {
-    setLoading(true);
-    if(!session?.user?.email) return;
-    await updateProfile(session.user.email, {
-      name,
-      username,
-      profilePic,
-      coverPic,
-    });
-    alert("Profile Updated ✅");
-    window.location.reload();
-   } catch (error) {
-    alert(err.message);
-   }
+    try {
+      setLoading(true);
+      if (!session?.user?.email) return;
+      await updateProfile(session.user.email, {
+        name,
+        username,
+        profilePic,
+        coverPic,
+      });
+      toast.success("Profile Updated ✅");
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000);
+
+      // window.location.reload();
+    } catch (error) {
+      alert(err.message);
+    } finally{
+      setLoading(false)
+    }
   };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-10">
+        <ToastContainer position="top-right" autoClose={3000} />
+
       <h1 className="text-3xl font-bold mb-10">Profile Settings</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
@@ -76,7 +102,11 @@ export default function Settings() {
                 <label className="text-sm text-gray-400 block mb-1">
                   Email
                 </label>
-                <input disabled value={email} className=" w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none" />
+                <input
+                  disabled
+                  value={email}
+                  className=" w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none"
+                />
               </div>
 
               <div>
@@ -142,8 +172,12 @@ export default function Settings() {
           >
             Save Changes
           </button>
-           {loading ? "Saving..." : "Save Changes"}
+          {loading ? "Saving..." : "Save Changes"}
+
+
         </div>
+
+       
 
         {/* PROFILE PREVIEW */}
         <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 h-fit">
