@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   profilePic: { type: String, default: "" },
   coverPic: { type: String, default: "" },
-  razorpayId: { type: String, default: "" },
+  stripe_account_id: { type: String , default: null},
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

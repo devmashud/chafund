@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { getUserData, updateProfile } from "@/actions/useractions";
+import { getUserData, updateProfile, connectStripe } from "@/actions/useractions";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function Settings() {
@@ -12,22 +12,7 @@ export default function Settings() {
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // <ToastContainer
-  //   position="top-left"
-  //   autoClose={5000}
-  //   hideProgressBar={false}
-  //   newestOnTop={false}
-  //   closeOnClick={false}
-  //   rtl={false}
-  //   pauseOnFocusLoss
-  //   draggable
-  //   pauseOnHover
-  //   theme="light"
-  //   transition={Bounce}
-  // />;
-
-
+  const [stripeID, setStripeID] = useState("");
 
   useEffect(() => {
     const load = async () => {
@@ -44,6 +29,7 @@ export default function Settings() {
           setUsername(user.username || "");
           setProfilePic(user.profilePic || "");
           setCoverPic(user.coverPic || "");
+          setStripeID(user.stripe_account_id || "");
         }
       }
     };
@@ -60,24 +46,25 @@ export default function Settings() {
         username,
         profilePic,
         coverPic,
+        stripeID,
       });
       toast.success("Profile Updated ✅");
 
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 3000);
 
       // window.location.reload();
     } catch (error) {
       alert(err.message);
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-10">
-        <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <h1 className="text-3xl font-bold mb-10">Profile Settings</h1>
 
@@ -155,13 +142,19 @@ export default function Settings() {
           <div className="bg-slate-900 p-6 rounded-xl border border-slate-800">
             <h2 className="text-xl font-semibold mb-4">Payment Settings</h2>
 
-            <div>
-              <label className="text-sm text-gray-400 block mb-1">
-                Razorpay Key
-              </label>
-
-              <input className="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none" />
-            </div>
+            {stripeID ? (
+              <p className="text-green-400">✅ Stripe Connected</p>
+            ) : (
+              <button
+                onClick={async () => {
+                  const url = await connectStripe(email);
+                  window.location.href = url;
+                }}
+                className="w-full py-3 rounded-lg bg-purple-600 hover:opacity-90"
+              >
+                Connect Stripe
+              </button>
+            )}
           </div>
 
           {/* Save Button */}
@@ -173,11 +166,7 @@ export default function Settings() {
             Save Changes
           </button>
           {loading ? "Saving..." : "Save Changes"}
-
-
         </div>
-
-       
 
         {/* PROFILE PREVIEW */}
         <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 h-fit">

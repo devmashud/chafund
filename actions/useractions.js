@@ -1,45 +1,72 @@
-"use server"
+"use server";
 
-import Stripe from "stripe"
-import Payment from "@/models/Payment"
-import User from "@/models/User"
-import connectDB from "@/lib/db"
+import Stripe from "stripe";
+import Payment from "@/models/Payment";
+import User from "@/models/User";
+import connectDB from "@/lib/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
-export const initiate = async(amount, to_username, paymentform)=>{
-    await connectDB();
+export const connectStripe = async(email)=>{
+  await connectDB();
 
-    //optional username cheak 
-    const user = await User.findOne({username: to_username})
+  const account = await stripe.accounts.create({
+    type: "express",
+  })
 
-    // Stripe session create
-    const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    mode: "payment",
+  await User.findOneAndUpdate({email}, {stripe_account_id: account.id})
 
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: `Support ${to_username}`,
-          },
-          unit_amount: amount * 100, // important
-        },
-        quantity: 1,
-      },
-    ],
-
-    metadata: {
-      to_user: to_username,
-      message: paymentform?.message || "",
-    },
-
-    success_url: `${process.env.NEXTAUTH_URL}/success`,
-    cancel_url: `${process.env.NEXTAUTH_URL}/cancel`,
+  const accountLink = await stripe.accountLinks.create({
+    account: account.id,
+    refresh_url: "http://localhost:3000/retry",
+    return_url: "http://localhost:3000/dashboard",
+    type: "account_onboarding",
   });
+
+  return accountLink.url;
+
+}
+
+
+
+export const initiate = async (amount, to_username, paymentform) => {
+  await connectDB();
+
+  //optional username cheak
+  const user = await User.findOne({ username: to_username });
+
+  // Stripe session create
+  const session = await stripe.checkout.sessions.create(
+    {
+      payment_method_types: ["card"],
+      mode: "payment",
+
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `Support ${to_username}`,
+            },
+            unit_amount: amount * 100, // important
+          },
+          quantity: 1,
+        },
+      ],
+
+      metadata: {
+        to_user: to_username,
+        message: paymentform?.message || "",
+      },
+
+      success_url: `${process.env.NEXTAUTH_URL}/success`,
+      cancel_url: `${process.env.NEXTAUTH_URL}/cancel`,
+    },
+    {
+      stripeAccount: User.stripe_account_id,
+    },
+  );
 
   // 3️⃣ pending payment save (same like Razorpay)
   await Payment.create({
@@ -51,11 +78,9 @@ export const initiate = async(amount, to_username, paymentform)=>{
     status: "pending",
   });
 
-console.log("to_username in server:", to_username); 
+  console.log("to_username in server:", to_username);
   return session.url;
-
-}
-
+};
 
 export const fetchUser = async () => {
   await connectDB();
@@ -67,32 +92,35 @@ export const fetchUser = async () => {
   return payments;
 };
 
-
-export const getUserData= async (email)=>{
+export const getUserData = async (email) => {
   await connectDB();
-  const user = await User.findOne({email});
+  const user = await User.findOne({ email });
 
-  return JSON.parse(JSON.stringify(user))
-}
+  return JSON.parse(JSON.stringify(user));
+};
 
-export const updateProfile =  async(email, data)=>{
+export const updateProfile = async (email, data) => {
   await connectDB();
-    // 🔴 username unique check
-  
-    const ExistingUser = await User.findOne({username: data.username});
+  // 🔴 username unique check
 
-    if(ExistingUser && ExistingUser.email !== email){
-      throw new Error("Username already taken");
-    }
- 
-    //update user
+  const ExistingUser = await User.findOne({ username: data.username });
 
-    await User.findOneAndUpdate({email}, {
+  if (ExistingUser && ExistingUser.email !== email) {
+    throw new Error("Username already taken");
+  }
+
+  //update user
+
+  await User.findOneAndUpdate(
+    { email },
+    {
       name: data.name,
       username: data.username,
       profilePic: data.profilePic,
       coverPic: data.coverPic,
-    });
+      stripe_account_id: data.stripeID,
+    },
+  );
 
-    return {success: true};
-  }
+  return { success: true };
+};

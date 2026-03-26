@@ -5,6 +5,7 @@ import Payment from "@/models/Payment";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
+    await connectDB(); 
   const body = await req.text();
 
   const headersList = await headers(); // ✅ fix

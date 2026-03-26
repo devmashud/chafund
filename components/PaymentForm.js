@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useState, useEffect } from "react";
 import { initiate, fetchUser } from "@/actions/useractions";
-import { getStripe } from "@/lib/stripe";
 
 export default function PaymentForm({ username }) {
   const [name, setName] = useState("");
@@ -142,13 +141,6 @@ export default function PaymentForm({ username }) {
                 Pay
               </button>
 
-              <button
-                onClick={() => {
-                  getUser();
-                }}
-              >
-                Data collected
-              </button>
             </div>
           </div>
         </div>
