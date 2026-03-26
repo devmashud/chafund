@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { getUserData } from "@/actions/useractions";
+import { getUserData, updateProfile } from "@/actions/useractions";
 
 export default function Settings() {
   const { data: session } = useSession();
@@ -10,6 +10,7 @@ export default function Settings() {
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
+  const [loading, setLoading] = useState(false);
 
  useEffect(() => {
   const load = async () => {
@@ -34,9 +35,20 @@ export default function Settings() {
 }, [session]);
 
   const handleSave = async () => {
-    // console.log(session?.user?.username);
-
-    console.log(name)
+   try {
+    setLoading(true);
+    if(!session?.user?.email) return;
+    await updateProfile(session.user.email, {
+      name,
+      username,
+      profilePic,
+      coverPic,
+    });
+    alert("Profile Updated ✅");
+    window.location.reload();
+   } catch (error) {
+    alert(err.message);
+   }
   };
 
   return (
@@ -64,7 +76,7 @@ export default function Settings() {
                 <label className="text-sm text-gray-400 block mb-1">
                   Email
                 </label>
-                <input value={email} className=" w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none" />
+                <input disabled value={email} className=" w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none" />
               </div>
 
               <div>
@@ -124,13 +136,13 @@ export default function Settings() {
 
           {/* Save Button */}
           <button
-            onClick={() => {
-              handleSave();
-            }}
+            onClick={handleSave}
+            disabled={loading}
             className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 font-semibold"
           >
             Save Changes
           </button>
+           {loading ? "Saving..." : "Save Changes"}
         </div>
 
         {/* PROFILE PREVIEW */}

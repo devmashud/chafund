@@ -74,3 +74,25 @@ export const getUserData= async (email)=>{
 
   return JSON.parse(JSON.stringify(user))
 }
+
+export const updateProfile =  async(email, data)=>{
+  await connectDB();
+    // 🔴 username unique check
+  
+    const ExistingUser = await User.findOne({username: data.username});
+
+    if(ExistingUser && ExistingUser.email !== email){
+      throw new Error("Username already taken");
+    }
+ 
+    //update user
+
+    await User.findOneAndUpdate({email}, {
+      name: data.name,
+      username: data.username,
+      profilePic: data.profilePic,
+      coverPic: data.coverPic,
+    });
+
+    return {success: true};
+  }
