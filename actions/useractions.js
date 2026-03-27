@@ -7,41 +7,84 @@ import connectDB from "@/lib/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-
-export const connectStripe = async(email)=>{
+export const getOnboardingLink = async (email) => {
   await connectDB();
+  const user = await User.findOne({ email });
 
-  const account = await stripe.accounts.create({
-    type: "express",
-  })
-
-  await User.findOneAndUpdate({email}, {stripe_account_id: account.id})
+  if (!user || !user.stripe_account_id) {
+    throw new Error("User has not connected Stripe yet");
+  }
 
   const accountLink = await stripe.accountLinks.create({
-    account: account.id,
+    account: user.stripe_account_id,
     refresh_url: "http://localhost:3000/retry",
     return_url: "http://localhost:3000/dashboard",
     type: "account_onboarding",
   });
 
   return accountLink.url;
+};
 
-}
+export const connectStripe = async (email) => {
+  await connectDB();
 
+  const user = await User.findOne({ email });
 
+  if (user.stripe_account_id) {
+    // already account ache, abar create korar dorkar nai
+    return getOnboardingLink(email);
+  }
+
+  const account = await stripe.accounts.create({
+    type: "express",
+    country: "GB",
+    capabilities: {
+      card_payments: { requested: true },
+      transfers: { requested: true },
+    },
+  });
+
+  await User.findOneAndUpdate({ email }, { stripe_account_id: account.id });
+
+  return getOnboardingLink(email);
+};
 
 export const initiate = async (amount, to_username, paymentform) => {
   await connectDB();
 
-  //optional username cheak
   const user = await User.findOne({ username: to_username });
 
-  // Stripe session create
+  if (!user) throw new Error("Recipient user not found");
+
+  if (!user.stripe_account_id) {
+    throw new Error("Recipient has not connected Stripe yet");
+  }
+
+  // ✅ Stripe theke real account info nao
+  const account = await stripe.accounts.retrieve(user.stripe_account_id);
+
+  console.log("CAPABILITIES:", account.capabilities);
+  console.log("CHARGES ENABLED:", account.charges_enabled);
+  console.log("DETAILS SUBMITTED:", account.details_submitted);
+  // ✅ onboarding incomplete hole redirect link dao
+  if (!account.details_submitted || !account.charges_enabled) {
+    const link = await stripe.accountLinks.create({
+      account: user.stripe_account_id,
+      refresh_url: "http://localhost:3000/retry",
+      return_url: "http://localhost:3000/dashboard",
+      type: "account_onboarding",
+    });
+
+    console.log("charges_enabled:", account.charges_enabled);
+    console.log("details_submitted:", account.details_submitted);
+    return link.url; // 🔥 payment na, onboarding e pathao
+  }
+
+  // ✅ payment session
   const session = await stripe.checkout.sessions.create(
     {
       payment_method_types: ["card"],
       mode: "payment",
-
       line_items: [
         {
           price_data: {
@@ -49,36 +92,32 @@ export const initiate = async (amount, to_username, paymentform) => {
             product_data: {
               name: `Support ${to_username}`,
             },
-            unit_amount: amount * 100, // important
+            unit_amount: amount * 100,
           },
           quantity: 1,
         },
       ],
-
       metadata: {
         to_user: to_username,
         message: paymentform?.message || "",
       },
-
       success_url: `${process.env.NEXTAUTH_URL}/success`,
       cancel_url: `${process.env.NEXTAUTH_URL}/cancel`,
     },
     {
-      stripeAccount: User.stripe_account_id,
+      stripeAccount: user.stripe_account_id,
     },
   );
 
-  // 3️⃣ pending payment save (same like Razorpay)
   await Payment.create({
     oid: session.id,
-    amount: amount,
+    amount,
     to_user: to_username,
     name: paymentform.name,
     message: paymentform.message,
     status: "pending",
   });
 
-  console.log("to_username in server:", to_username);
   return session.url;
 };
 
@@ -87,9 +126,9 @@ export const fetchUser = async () => {
 
   const payments = await Payment.find({
     status: "completed",
-  }).sort({ createdAt: -1 }); // latest first
+  }).sort({ createdAt: -1 });
 
-  return payments;
+  return JSON.parse(JSON.stringify(payments));
 };
 
 export const getUserData = async (email) => {

@@ -26,10 +26,10 @@ export default function PaymentForm({ username }) {
         message,
       });
 
-      console.log("url:", checkoutUrl);
-
+      
       // redirect
       window.location.href = checkoutUrl;
+      console.log("url:", checkoutUrl);
     } catch (err) {
       console.log("Error:", err.message);
     }
