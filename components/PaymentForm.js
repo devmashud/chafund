@@ -3,7 +3,8 @@
 import { useLayoutEffect, useState, useEffect } from "react";
 import { initiate, fetchUser } from "@/actions/useractions";
 
-export default function PaymentForm({ username }) {
+export default function PaymentForm({ username , user}) {
+  // console.log(user, "user");
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -21,12 +22,11 @@ export default function PaymentForm({ username }) {
       }
 
       // 1️⃣ Server Action call
-      const checkoutUrl = await initiate(Number(amount), username, {
+      const checkoutUrl = await initiate(Number(amount), user.username, {
         name,
         message,
       });
 
-      
       // redirect
       window.location.href = checkoutUrl;
       console.log("url:", checkoutUrl);
@@ -36,7 +36,7 @@ export default function PaymentForm({ username }) {
   };
 
   const getData = async () => {
-    const payments = await fetchUser();
+    const payments = await fetchUser(user.username);
     setcurrentUser(payments);
     console.log(payments);
   };
@@ -51,7 +51,6 @@ export default function PaymentForm({ username }) {
 
   return (
     <>
-      {/* {username} */}
       <div className="cover w-full  relative">
         <img
           className="object-cover w-full"
@@ -71,7 +70,7 @@ export default function PaymentForm({ username }) {
       </div>
 
       <div className="info flex justify-center items-center flex-col py-30 gap-2">
-        <div className="font-bold text-3xl">@{username}</div>
+        <div className="font-bold text-3xl">@{user.username}</div>
         <div className="text-gray-400">Creating Animated art for VTT's</div>
         <div className="text-gray-400">
           23,311 members108 posts$17,590/release
@@ -140,7 +139,6 @@ export default function PaymentForm({ username }) {
               >
                 Pay
               </button>
-
             </div>
           </div>
         </div>

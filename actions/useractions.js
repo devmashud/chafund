@@ -121,10 +121,11 @@ export const initiate = async (amount, to_username, paymentform) => {
   return session.url;
 };
 
-export const fetchUser = async () => {
+export const fetchUser = async (username) => {
   await connectDB();
 
   const payments = await Payment.find({
+    to_user: username,
     status: "completed",
   }).sort({ createdAt: -1 });
 
