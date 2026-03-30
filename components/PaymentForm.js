@@ -53,8 +53,8 @@ export default function PaymentForm({ username , user}) {
     <>
       <div className="cover w-full  relative">
         <img
-          className="object-cover w-full"
-          src="https://c10.patreonusercontent.com/4/patreon-media/p/campaign/4842667/452146dcfeb04f38853368f554aadde1/eyJ3IjoxNjAwLCJ3ZSI6MX0%3D/20.gif?token-hash=py2NffPgVZJ_D3KVIWQy3gULEUawvLTB1KS-4uTwq2I%3D&token-time=1775260800"
+          className="object-cover w-full h-70 "
+          src={user.coverPic}
           alt=""
         />
 
@@ -63,7 +63,7 @@ export default function PaymentForm({ username , user}) {
             className="object-cover w-full h-full"
             width={200}
             height={100}
-            src="https://plus.unsplash.com/premium_photo-1677545183884-421157b2da02?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src={user.profilePic}
             alt=""
           />
         </div>
