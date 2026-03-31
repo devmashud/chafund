@@ -23,6 +23,7 @@
     "react-dom": "19.2.3",
     "react-router-dom": "^7.13.1",
     "react-toastify": "^11.0.5",
+    "rough-notation": "^0.5.1",
     "shadcn": "^4.0.5",
     "stripe": "^20.4.1",
     "tailwind-merge": "^3.5.0",
