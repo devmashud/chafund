@@ -71,7 +71,7 @@ export default function PaymentForm({ username , user}) {
 
       <div className="info flex justify-center items-center flex-col py-30 gap-2">
         <div className="font-bold text-3xl">@{user.username}</div>
-        <div className="text-gray-400">Creating Animated art for VTT's</div>
+        <div className="text-gray-400">{user.bio}</div>
         <div className="text-gray-400">
           23,311 members108 posts$17,590/release
         </div>

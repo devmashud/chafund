@@ -1,7 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { getUserData, updateProfile, connectStripe } from "@/actions/useractions";
+import {
+  getUserData,
+  updateProfile,
+  connectStripe,
+} from "@/actions/useractions";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function Settings() {
@@ -11,6 +15,7 @@ export default function Settings() {
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
+  const [bio, setBio] = useState("")
   const [loading, setLoading] = useState(false);
   const [stripeID, setStripeID] = useState("");
 
@@ -27,6 +32,7 @@ export default function Settings() {
           setName(user.name || "");
           setEmail(user.email || "");
           setUsername(user.username || "");
+          setBio(user.bio || "");
           setProfilePic(user.profilePic || "");
           setCoverPic(user.coverPic || "");
           setStripeID(user.stripe_account_id || "");
@@ -44,6 +50,7 @@ export default function Settings() {
       await updateProfile(session.user.email, {
         name,
         username,
+        bio,
         profilePic,
         coverPic,
         stripeID,
@@ -115,6 +122,17 @@ export default function Settings() {
 
             <div className="space-y-4">
               <div>
+                <label className="text-sm text-gray-400 block mb-1">
+                  Profile Description
+                </label>
+                <input
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  className="w-full p-3 bg-slate-800 border border-slate-700 rounded-md focus:border-purple-500 outline-none"
+                />
+              </div>
+
+                 <div>
                 <label className="text-sm text-gray-400 block mb-1">
                   Profile Picture URL
                 </label>
@@ -190,6 +208,7 @@ export default function Settings() {
 
           <div className="text-center mt-4">
             <p className="text-lg font-semibold">{username}</p>
+            <p className=" text-[10px]">{bio}</p>
             <p className="text-gray-400 text-sm">Your creator page preview</p>
           </div>
         </div>

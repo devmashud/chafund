@@ -156,6 +156,7 @@ export const updateProfile = async (email, data) => {
     {
       name: data.name,
       username: data.username,
+      bio: data.bio,
       profilePic: data.profilePic,
       coverPic: data.coverPic,
       stripe_account_id: data.stripeID,
