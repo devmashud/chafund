@@ -1,17 +1,12 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SessionWrapper from "@/components/SessionWrapper";
+import { Inter } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata = {
@@ -31,16 +26,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col ">
+      <body
+        className={`${inter.className} min-h-screen flex flex-col text-white 
+        [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]`}
+      >
         <SessionWrapper>
           <Navbar />
-          <main className="flex-1 relative  ">
-            <div className=" text-white  inset-0 -z-10 
-                [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
-            {children}
 
-            </div>
+          <main className="flex-1">
+            {children}
           </main>
+
           <Footer />
         </SessionWrapper>
       </body>

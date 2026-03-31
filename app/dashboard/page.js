@@ -9,7 +9,7 @@ export default function Dashboard() {
     redirect("/login");
   }
   return (
-    <div className="min-h-screen bg-slate-950 p-10 text-white">
+    <div className="min-h-screen  p-10 text-white">
       <h1 className="text-3xl font-bold mb-8">Creator Dashboard</h1>
 
       {/* Stats */}

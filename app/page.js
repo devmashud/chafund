@@ -20,7 +20,7 @@ export default function Home() {
         </p>
 
         <div className="flex gap-4">
-          <button className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition">
+          <button className="px-6 py-3 rounded-2xl bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] hover:opacity-90 transition">
             Start Fundraising
           </button>
 
