@@ -25,3 +25,11 @@ ChaFund aims to empower developers and creators by giving them a simple and acce
 ---
 
 Built with ❤️ by a Bangladeshi developer 🇧🇩
+
+## Screenshot
+
+![Home](./public/Landing-page.png)
+![Login](./public/login.png)
+![Profile](./public/user1.png)
+![Settings](./public/profile-setting.png)
+![Payment](./public/payment-gatway.png)
