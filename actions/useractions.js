@@ -165,3 +165,50 @@ export const updateProfile = async (email, data) => {
 
   return { success: true };
 };
+
+
+
+export const  getDashboardStats = async(username)=>{
+  await connectDB();
+
+  // find all completed pyment for this user
+
+  const payments =  await Payment.find({
+      to_user: username,
+      status: "completed",
+    });
+
+    console.log(payments, "Payments")
+
+  //total ammount
+
+  const totalAmount =  payments.reduce((sum, item)=>{
+    return sum + item.amount
+  }, 0)
+
+  // totalsupport
+
+  const totalSupport =  payments.length
+
+
+  //this Month
+
+  const now = new Date();
+
+  const thisMonthPayments =   payments.filter((item)=>{
+    const date = new Date(item.createdAt);
+
+    return(
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear()
+
+    )
+  })
+
+  const thisMonth =  thisMonthPayments.reduce((sum, item)=>{
+    return sum + item.amount
+  }, 0)
+
+  return { totalAmount, totalSupport, thisMonth}
+
+}

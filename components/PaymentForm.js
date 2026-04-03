@@ -45,9 +45,7 @@ export default function PaymentForm({ username , user}) {
     getData();
   }, []);
 
-  const getUser = () => {
-    console.log(currentUser);
-  };
+ 
 
   return (
     <>
@@ -58,9 +56,9 @@ export default function PaymentForm({ username , user}) {
           alt=""
         />
 
-        <div className=" profile-pic rounded-lg border w-40 h-40 absolute -bottom-20 left-1/2 -translate-x-1/2 ">
+        <div className=" profile-pic rounded-lg border w-40 h-40 absolute -bottom-20 left-1/2 -translate-x-1/2 overflow-hidden">
           <img
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-full "
             width={200}
             height={100}
             src={user.profilePic}
