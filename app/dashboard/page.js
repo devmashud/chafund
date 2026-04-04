@@ -3,37 +3,51 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { getDashboardStats } from "@/actions/useractions";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { fetchUser } from "@/actions/useractions";
 
 export default function Dashboard() {
   const { data: session } = useSession();
 
+  const [currentUser, setcurrentUser] = useState([]);
+
   const [stats, setStats] = useState({
     totalAmount: 0,
     totalSupport: 0,
-    thisMonth: 0,
+    last7DaysTotal: 0,
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session?.user?.username) {
+        // console.log("username: ", session.user.username); // debug
 
-useEffect(() => {
-  const fetchData = async () => {
-    if (session?.user?.username) {
-      // console.log("username: ", session.user.username); // debug
+        const data = await getDashboardStats(session?.user?.username);
+        // console.log("Data:", data); // debug
+        setStats(data);
+      }
+    };
 
-      const data = await getDashboardStats(session?.user?.username);
-      // console.log("Data:", data); // debug
-      setStats(data);
+    fetchData();
+  }, []);
+  const router = useRouter();
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
     }
+  }, [session]);
+
+  const getData = async () => {
+    const payments = await fetchUser(session?.user?.username);
+    setcurrentUser(payments);
+    console.log(payments);
   };
 
-  fetchData();
-}, []);
- const router = useRouter();
- useEffect(() => {
-  if (!session) {
-    router.push("/login");
-  }
-}, [session]);
+  useEffect(() => {
+    getData();
+  }, []);
+
+
 
   return (
     <div className="min-h-screen  p-10 text-white">
@@ -52,8 +66,8 @@ useEffect(() => {
         </div>
 
         <div className="bg-slate-900 p-6 rounded-xl">
-          <p className="text-gray-400">This Month</p>
-          <h2 className="text-2xl font-bold">{stats.thisMonth}</h2>
+          <p className="text-gray-400">This Week</p>
+          <h2 className="text-2xl font-bold">{stats.last7DaysTotal}</h2>
         </div>
       </div>
 
@@ -71,20 +85,17 @@ useEffect(() => {
           </thead>
 
           <tbody>
-            <tr>
-              <td>Rahim</td>
-              <td>$20</td>
-              <td>Love your work</td>
-            </tr>
-
-            <tr>
-              <td>Karim</td>
-              <td>$10</td>
-              <td>Great content</td>
-            </tr>
+            {currentUser.map((item, index) => (
+              <tr key={index}>
+                <td>{item.name}</td>
+                <td>${item.amount}</td>
+                <td>{item.message}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+      {/* <button onClick={()=>{getData()}} className="border p-4 px-10 bg-red-600 m-10"> click</button> */}
     </div>
   );
 }

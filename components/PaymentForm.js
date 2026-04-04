@@ -38,7 +38,7 @@ export default function PaymentForm({ username , user}) {
   const getData = async () => {
     const payments = await fetchUser(user.username);
     setcurrentUser(payments);
-    console.log(payments);
+    // console.log(payments);
   };
 
   useEffect(() => {

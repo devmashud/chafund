@@ -166,45 +166,38 @@ export const updateProfile = async (email, data) => {
   return { success: true };
 };
 
-
-
-export const  getDashboardStats = async(username)=>{
+export const getDashboardStats = async (username) => {
   await connectDB();
 
   const payments = await Payment.find({
-    to_user : username,
-    status: "completed"
+    to_user: username,
+    status: "completed",
   });
 
   //total_Amount
 
-  const totalAmount = payments.reduce((sum, item)=>{
-    return sum + item.amount
-  }, 0)
+  const totalAmount = payments.reduce((sum, item) => {
+    return sum + item.amount;
+  }, 0);
 
   //total_supportes
 
   const totalSupport = payments.length;
 
-
   //this_month
 
-  const now = new Date();
+const now = new Date();
+const sevenDaysAgo = new Date(now);
+sevenDaysAgo.setUTCDate(now.getUTCDate() - 7);
 
-  const thisMonthPayments = payments.filter((item)=>{
-    const date = new Date(item.createdAt);
-    return(
-      date.getMonth() === now.getMonth() && 
-      date.getFullYear() === now.getFullYear()
-    )
-  })
+const last7DaysPayments = payments.filter((item) => {
+  const date = new Date(item.createdAt);
+  return date >= sevenDaysAgo && date <= now;
+});
 
-  const thisMonth = thisMonthPayments.reduce((sum , item)=>{
-    return sum + item.amount
-  },0)
+const last7DaysTotal = last7DaysPayments.reduce((sum, item) => {
+  return sum + item.amount;
+}, 0);
 
-
-
-
-  return {totalAmount, totalSupport, thisMonth}
-}
+  return { totalAmount, totalSupport, last7DaysTotal };
+};
