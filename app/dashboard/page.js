@@ -43,7 +43,7 @@ useEffect(() => {
       <div className="grid grid-cols-3 gap-6 mb-10">
         <div className="bg-slate-900 p-6 rounded-xl">
           <p className="text-gray-400">Total Earnings</p>
-          <h2 className="text-2xl font-bold">{stats.totalAmount}</h2>
+          <h2 className="text-2xl font-bold">${stats.totalAmount}</h2>
         </div>
 
         <div className="bg-slate-900 p-6 rounded-xl">
