@@ -2,6 +2,11 @@ import PaymentForm from "@/components/PaymentForm";
 import connectDB from "@/lib/db";
 import User from "@/models/User";
 
+
+export const metadata = {
+  title: "Support Creator | ChaFund",
+};
+
 const Username = async ({ params }) => {
   // ✅ MUST unwrap Promise
   const { username } = await params;
@@ -14,6 +19,7 @@ const Username = async ({ params }) => {
   console.log("USER:", user);
 
   if (!user) return <div>User not found</div>;
+
 
   return (
     <PaymentForm

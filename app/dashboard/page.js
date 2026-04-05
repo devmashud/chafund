@@ -18,6 +18,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
+    document.title = "Creator Dashboard | ChaFund";
     const fetchData = async () => {
       if (session?.user?.username) {
         // console.log("username: ", session.user.username); // debug
@@ -85,7 +86,7 @@ export default function Dashboard() {
           </thead>
 
           <tbody>
-            {currentUser.map((item, index) => (
+            {currentUser.map(   (item, index) => (
               <tr key={index}>
                 <td>{item.name}</td>
                 <td>${item.amount}</td>
@@ -95,7 +96,6 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
-      {/* <button onClick={()=>{getData()}} className="border p-4 px-10 bg-red-600 m-10"> click</button> */}
     </div>
   );
 }

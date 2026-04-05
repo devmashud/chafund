@@ -3,6 +3,8 @@
 import { useLayoutEffect, useState, useEffect } from "react";
 import { initiate, fetchUser } from "@/actions/useractions";
 
+
+
 export default function PaymentForm({ username , user}) {
   // console.log(user, "user");
   const [name, setName] = useState("");
@@ -10,6 +12,8 @@ export default function PaymentForm({ username , user}) {
   const [message, setMessage] = useState("");
 
   const [currentUser, setcurrentUser] = useState([]);
+ 
+  
 
   //console.log("username in client:", username);
 

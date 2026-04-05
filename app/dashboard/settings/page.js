@@ -20,6 +20,7 @@ export default function Settings() {
   const [stripeID, setStripeID] = useState("");
 
   useEffect(() => {
+    document.title = "Dashboard Settings";
     const load = async () => {
       console.log("session:", session);
 

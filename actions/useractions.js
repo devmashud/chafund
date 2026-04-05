@@ -7,16 +7,9 @@ import connectDB from "@/lib/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export const getOnboardingLink = async (email) => {
-  await connectDB();
-  const user = await User.findOne({ email });
-
-  if (!user || !user.stripe_account_id) {
-    throw new Error("User has not connected Stripe yet");
-  }
-
+export const getOnboardingLink = async (accountId) => {
   const accountLink = await stripe.accountLinks.create({
-    account: user.stripe_account_id,
+    account: accountId,
     refresh_url: "http://localhost:3000/retry",
     return_url: "http://localhost:3000/dashboard",
     type: "account_onboarding",
@@ -28,11 +21,12 @@ export const getOnboardingLink = async (email) => {
 export const connectStripe = async (email) => {
   await connectDB();
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+  if (!user) throw new Error("User not found");
 
   if (user.stripe_account_id) {
-    // already account ache, abar create korar dorkar nai
-    return getOnboardingLink(email);
+    return getOnboardingLink(user.stripe_account_id);
   }
 
   const account = await stripe.accounts.create({
@@ -44,9 +38,10 @@ export const connectStripe = async (email) => {
     },
   });
 
-  await User.findOneAndUpdate({ email }, { stripe_account_id: account.id });
+  user.stripe_account_id = account.id;
+  await user.save();
 
-  return getOnboardingLink(email);
+  return getOnboardingLink(account.id);
 };
 
 export const initiate = async (amount, to_username, paymentform) => {

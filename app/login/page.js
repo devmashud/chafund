@@ -1,13 +1,19 @@
 "use client";
-import React from "react";
+import React  from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 const Login = () => {
   const { data: session } = useSession();
   if (session) {
     redirect("/dashboard");
   }
+
+  useEffect(() => {
+    document.title = "Login"
+  }, [])
+  
 
   return (
     <>
