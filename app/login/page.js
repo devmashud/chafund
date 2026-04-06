@@ -1,5 +1,5 @@
 "use client";
-import React  from "react";
+import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
@@ -11,18 +11,17 @@ const Login = () => {
   }
 
   useEffect(() => {
-    document.title = "Login"
-  }, [])
-  
+    document.title = "Login";
+  }, []);
 
   return (
     <>
       <div className="min-h-[calc(100vh-124px)] bg-gray-950 flex flex-col items-center justify-center   text-white">
         {/* Heading */}
-        <h2 className="font-bold text-3xl text-center mb-6">
+        <h2 className="font-bold text-2xl md:text-3xl text-center mb-6">
           Login / Signup to Get Your Fans to Support You
         </h2>
-        <p className="text-gray-400 text-center max-w-md mb-10">
+        <p className="text-gray-400 text-[15px] md:text-[17px] text-center max-w-md mb-10">
           Sign in with your preferred method and start receiving support from
           your fans instantly.
         </p>
@@ -30,9 +29,10 @@ const Login = () => {
         {/* Social Login Buttons */}
         <div className="social-login-buttons flex flex-col md:flex-row flex-wrap items-center justify-center gap-6 w-full max-w-lg">
           {/* GitHub */}
-          <button 
-          onClick={()=> signIn()}
-          className="bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] font-medium px-6 py-3 rounded-xl text-sm flex items-center gap-2.5 hover:opacity-90 transition-all shadow-glow group">
+          <button
+            onClick={() => signIn("github")}
+            className="bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] font-medium px-6 py-3 rounded-xl text-sm flex items-center gap-2.5 hover:opacity-90 transition-all shadow-glow group"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -67,15 +67,14 @@ const Login = () => {
           </button>
 
           {/* Google */}
-          <button 
-          
-          className="flex items-center justify-center gap-3 px-6 py-3 rounded-2xl bg-white text-black font-medium hover:opacity-90 transition w-full md:w-auto">
+          <button className="bg-white text-black font-medium px-6 py-3 rounded-xl text-sm flex items-center justify-center gap-2.5 hover:opacity-90 transition-all shadow-glow group  md:w-auto">
             <svg
               aria-label="Google logo"
-              width="16"
-              height="16"
+              width="24"
+              height="24"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
+              className="w-4 h-4"
             >
               <g>
                 <path d="m0 0H512V512H0" fill="#fff"></path>

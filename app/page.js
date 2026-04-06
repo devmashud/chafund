@@ -6,28 +6,28 @@ export default function Home() {
   return (
     <>
       <div className="text-white flex flex-col justify-center items-center h-[50vh] gap-6 text-center px-4">
-        <h1 className="font-bold text-5xl md:text-6xl flex items-center gap-3">
+        <h1 className="font-bold text-2xl md:text-5xl md:text-6xl flex items-center gap-3">
           Welcome to <span className="text-purple-400">ChaFund</span>
-          <img width={80} src="/tea.gif" alt="chai" />
+          <img className="w-10 sm:w-30 " width={80} src="/tea.gif" alt="chai" />
         </h1>
 
-        <p className="max-w-2xl text-gray-300 text-lg">
+        <p className="max-w-2xl text-gray-300 text-sm md:text-lg">
           Let your supporters fund your passion. ChaFund makes it easy for
           creators and developers to receive small contributions and grow with
           their community.
         </p>
 
         <div className="flex gap-4">
-          <button className="px-6 py-3 rounded-2xl bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] hover:opacity-90 transition">
+          <button className=" px-5 md:px-6 text-[12px] md:text-[15px] py-3 rounded-3xl md:rounded-3xl bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] hover:opacity-90 transition">
             Start Fundraising
           </button>
 
-          <button className="px-6 py-3 rounded-2xl border border-white/30 hover:bg-white/10 transition">
+          <button className="px-5 md:px-6 text-[12px] md:text[15px] py-3 rounded-3xl md:rounded-3xl border border-white/30 hover:bg-white/10 transition">
             Learn More
           </button>
         </div>
 
-        <p className="my-4 leading-relaxed text-sm ">
+        <p className=" my-4 leading-relaxed text-sm ">
           Fuel{" "}
           <Highlighter action="underline" color="#FF9800">
             your ideas and projects,
