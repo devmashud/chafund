@@ -73,13 +73,13 @@ export default function PaymentForm({ username , user}) {
 
       <div className="info flex justify-center items-center flex-col py-30 gap-2">
         <div className="font-bold text-3xl">@{user.username}</div>
-        <div className="text-gray-400">{user.bio}</div>
-        <div className="text-gray-400">
+        <div className="text-gray-400 w-60 md:w-full text-[14px] text-center ">{user.bio}</div>
+        {/* <div className="text-gray-400  ">
           23,311 members108 posts$17,590/release
-        </div>
+        </div> */}
 
-        <div className="payment mt-11 flex gap-3 w-[80%]">
-          <div className="supporters w-1/2 bg-slate-900 rounded-lg p-6">
+        <div className="payment mt-11 flex flex-col md:flex-row gap-3 w-[80%]">
+          <div className="supporters w-full md:w-1/2 bg-slate-900 rounded-lg p-6">
             <h3 className="text-xl font-bold mb-4">Supporters</h3>
 
             <ul className="space-y-4">
@@ -106,7 +106,7 @@ export default function PaymentForm({ username , user}) {
               ))}
             </ul>
           </div>
-          <div className="makePayment w-1/2 bg-slate-900 rounded-lg p-6">
+          <div className="makePayment w-full md:w-1/2 bg-slate-900 rounded-lg p-6">
             <h3 className="text-xl font-bold mb-4">Make a Payment</h3>
 
             <div className="flex flex-col gap-4">
