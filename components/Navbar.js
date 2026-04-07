@@ -32,7 +32,7 @@ const Navbar = () => {
       </div>
 
       <div className={`
-    absolute top-16 right-0 w-full bg-black/90 backdrop-blur-md
+    absolute top-16  right-0 w-full bg-black/90 backdrop-blur-md
     flex flex-col items-center gap-4 p-4
     ${menuOpen ? "block" : "hidden"}
     md:static md:flex md:flex-row md:w-auto md:bg-transparent md:p-0
@@ -49,7 +49,7 @@ const Navbar = () => {
               }
               id="dropdownDefaultButton"
               data-dropdown-toggle="dropdown"
-              className=" bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] mx-3 hover:opacity-90 transition inline-flex items-center justify-center text-white  border border-transparent  focus:ring-[1px] focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-4 py-2.5 focus:outline-none"
+              className=" bg-[linear-gradient(135deg,_rgb(100,103,242),_rgb(133,80,226))] mx-3 hover:opacity-90 transition inline-flex items-center justify-center text-white  border border-transparent  focus:ring-[1px] focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-4 py-2.5  focus:outline-none"
               type="button"
             >
               Welcome {session.user.name}
@@ -74,7 +74,7 @@ const Navbar = () => {
 
             <div
               id="dropdown"
-              className={`z-10 bg-gray-900 ${showdropdown ? "" : "hidden"} absolute right-8 bg-neutral-primary-medium border border-default-medium rounded shadow w-44`}
+              className={`z-10 bg-gray-900 ${showdropdown ? "" : "hidden"} absolute md:not-first:top-11 right-8 bg-neutral-primary-medium border border-default-medium rounded shadow w-44`}
             >
               <ul
                 className="p-2 text-sm text-body font-medium"

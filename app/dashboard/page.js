@@ -48,14 +48,12 @@ export default function Dashboard() {
     getData();
   }, []);
 
-
-
   return (
     <div className="min-h-screen  p-10 text-white">
       <h1 className="text-3xl font-bold mb-8">Creator Dashboard</h1>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-6 mb-10">
+      <div className="grid md:grid-cols-3 gap-3 md:gap-6 mb-10">
         <div className="bg-slate-900 p-6 rounded-xl">
           <p className="text-gray-400">Total Earnings</p>
           <h2 className="text-2xl font-bold">${stats.totalAmount}</h2>
@@ -73,10 +71,10 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Payments */}
-      <div className="bg-slate-900 p-6 rounded-xl">
+      <div className="hidden md:block overflow-x-auto bg-slate-900 p-6 rounded-xl">
         <h2 className="text-xl font-bold mb-4">Recent Payments</h2>
 
-        <table className="w-full">
+        <table className="min-w-full">
           <thead>
             <tr className="text-gray-400 text-left">
               <th>Name</th>
@@ -86,7 +84,7 @@ export default function Dashboard() {
           </thead>
 
           <tbody>
-            {currentUser.map(   (item, index) => (
+            {currentUser.map((item, index) => (
               <tr key={index}>
                 <td>{item.name}</td>
                 <td>${item.amount}</td>
@@ -95,6 +93,40 @@ export default function Dashboard() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="md:hidden space-y-4">
+        {currentUser.map((item, index) => (
+          <div
+            key={index}
+            className="bg-gradient-to-br from-slate-800 to-slate-900 p-5 rounded-2xl shadow-lg border border-slate-700 hover:scale-[1.02] transition-all duration-200"
+          >
+            {/* Top Row */}
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-semibold text-white">
+                {item.name || "Anonymous"}
+              </h3>
+
+              <span className="bg-green-500/10 text-green-400 px-3 py-1 text-sm rounded-full font-medium">
+                ${item.amount}
+              </span>
+            </div>
+
+            {/* Message */}
+            <p className="text-gray-300 text-sm leading-relaxed">
+              {item.message || "No message provided."}
+            </p>
+
+            {/* Divider */}
+            <div className="border-t border-slate-700 my-3"></div>
+
+            {/* Footer */}
+            <div className="flex justify-between items-center text-xs text-gray-400">
+              <span>Supporter</span>
+              <span>#{index + 1}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
