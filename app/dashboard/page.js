@@ -9,6 +9,13 @@ import { fetchUser } from "@/actions/useractions";
 export default function Dashboard() {
   const { data: session } = useSession();
 
+   const router = useRouter();
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session]);
+
   const [currentUser, setcurrentUser] = useState([]);
 
   const [stats, setStats] = useState({
@@ -31,12 +38,7 @@ export default function Dashboard() {
 
     fetchData();
   }, []);
-  const router = useRouter();
-  useEffect(() => {
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session]);
+  
 
   const getData = async () => {
     const payments = await fetchUser(session?.user?.username);

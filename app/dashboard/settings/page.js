@@ -7,6 +7,7 @@ import {
   connectStripe,
 } from "@/actions/useractions";
 import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function Settings() {
   const { data: session } = useSession();
@@ -18,6 +19,14 @@ export default function Settings() {
   const [bio, setBio] = useState("")
   const [loading, setLoading] = useState(false);
   const [stripeID, setStripeID] = useState("");
+
+  const router = useRouter();
+
+    useEffect(() => {
+      if (!session) {
+        router.push("/login");
+      }
+    }, []);
 
   useEffect(() => {
     document.title = "Dashboard Settings";
