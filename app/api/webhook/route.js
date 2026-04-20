@@ -1,15 +1,15 @@
 import Stripe from "stripe";
-import { headers } from "next/headers";
 import Payment from "@/models/Payment";
+import connectDB from "@/lib/db";
+import { headers } from "next/headers";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-    
-  const body = await req.text();
+  await connectDB();
 
-  const headersList = await headers(); // ✅ fix
-  const sig = headersList.get("stripe-signature"); // ✅ fix
+  const body = await req.text();
+  const sig = headers().get("stripe-signature");
 
   let event;
 
@@ -17,34 +17,30 @@ export async function POST(req) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET,
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    console.log("❌ Webhook error:", err.message);
+    console.log("❌ Webhook Error:", err.message);
     return new Response("Webhook Error", { status: 400 });
   }
 
+  // 🔥 MAIN LOGIC
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
-    const existingPayment = await Payment.findOne({
-      oid: session.id,
-    });
+    const paymentId = session.metadata.paymentId;
 
-    // 🔥 already completed হলে skip
-    if (existingPayment?.status === "completed") {
-      console.log("⚠️ Already processed");
-      return new Response("ok", { status: 200 });
+    if (!paymentId) {
+      console.log("❌ No paymentId in metadata");
+      return new Response("No metadata", { status: 400 });
     }
 
-    // ✅ update only once
-    await Payment.findOneAndUpdate(
-      { oid: session.id },
-      { status: "completed" },
-    );
+    await Payment.findByIdAndUpdate(paymentId, {
+      status: "completed",
+    });
 
-    console.log("✅ Payment updated once");
+    console.log("✅ Payment updated to completed");
   }
 
-  return new Response("ok", { status: 200 });
+  return new Response("OK", { status: 200 });
 }
