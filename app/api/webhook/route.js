@@ -1,21 +1,15 @@
 import Stripe from "stripe";
 import { headers } from "next/headers";
 import Payment from "@/models/Payment";
-import connectDB from "../../../lib/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  await connectDB();
-
+    
   const body = await req.text();
 
-  const headersList = headers();
-  const sig = headersList.get("stripe-signature");
-
-  if (!sig) {
-    return new Response("No signature", { status: 400 });
-  }
+  const headersList = await headers(); // ✅ fix
+  const sig = headersList.get("stripe-signature"); // ✅ fix
 
   let event;
 
@@ -37,15 +31,16 @@ export async function POST(req) {
       oid: session.id,
     });
 
+    // 🔥 already completed হলে skip
     if (existingPayment?.status === "completed") {
       console.log("⚠️ Already processed");
       return new Response("ok", { status: 200 });
     }
 
+    // ✅ update only once
     await Payment.findOneAndUpdate(
       { oid: session.id },
       { status: "completed" },
-      { new: true },
     );
 
     console.log("✅ Payment updated once");
