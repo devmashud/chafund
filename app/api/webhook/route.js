@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { headers } from "next/headers";
 import Payment from "@/models/Payment";
-import connectDB from "@/lib/connectDB";
+import connectDB from "@/lib/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -23,7 +23,7 @@ export async function POST(req) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET,
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
     console.log("❌ Webhook error:", err.message);
@@ -45,7 +45,7 @@ export async function POST(req) {
     await Payment.findOneAndUpdate(
       { oid: session.id },
       { status: "completed" },
-      { new: true },
+      { new: true }
     );
 
     console.log("✅ Payment updated once");
