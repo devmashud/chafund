@@ -1,15 +1,18 @@
 import Stripe from "stripe";
 import Payment from "@/models/Payment";
 import connectDB from "@/lib/db";
-import { headers } from "next/headers";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+export const runtime = "nodejs";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2026-02-25.clover",
+});
 
 export async function POST(req) {
   await connectDB();
 
   const body = await req.text();
-  const sig = headers().get("stripe-signature");
+  const sig = req.headers.get("stripe-signature");
 
   let event;
 
@@ -17,18 +20,19 @@ export async function POST(req) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err) {
     console.log("❌ Webhook Error:", err.message);
     return new Response("Webhook Error", { status: 400 });
   }
 
-  // 🔥 MAIN LOGIC
+  console.log("👉 EVENT:", event.type);
+
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
-    const paymentId = session.metadata.paymentId;
+    const paymentId = session.metadata?.paymentId;
 
     if (!paymentId) {
       console.log("❌ No paymentId in metadata");
@@ -39,7 +43,7 @@ export async function POST(req) {
       status: "completed",
     });
 
-    console.log("✅ Payment updated to completed");
+    console.log("✅ Payment updated");
   }
 
   return new Response("OK", { status: 200 });
